@@ -1,4 +1,5 @@
 ﻿using Api.Model;
+using Api.Model.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,5 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureServices(
             (hostContext, services) =>
             {
-                services.AddDbContext<ApiContext>(
-                    options =>
-                        options.UseSqlServer(hostContext.Configuration.GetConnectionString("ApiContext")));
+                services.AddApiContext(hostContext.Configuration);
             });

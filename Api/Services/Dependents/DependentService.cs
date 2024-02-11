@@ -1,19 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
-using Api.Model;
-using Api.Selectors;
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Dtos.Dependent;
+using Api.Model;
+using Api.Selectors;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Services;
+namespace Api.Services.Dependents;
 
-public class DependentService(ApiContext apiContext)
+public class DependentService(ApiContext apiContext) : IDependentService
 {
-    /// <summary>
-    /// Retrieves all dependents.
-    /// </summary>
+    /// <inheritdoc />
     public async Task<List<GetDependentDto>> GetAllDependentAsync(CancellationToken cancellationToken)
     {
         return await apiContext.Dependents
@@ -21,6 +19,7 @@ public class DependentService(ApiContext apiContext)
             .ToListAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<GetDependentDto?> GetDependentAsync(int dependentId, CancellationToken cancellationToken)
     {
         return await apiContext.Dependents

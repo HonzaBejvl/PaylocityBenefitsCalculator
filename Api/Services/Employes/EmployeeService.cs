@@ -7,13 +7,11 @@ using Api.Model;
 using Api.Selectors;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Services;
+namespace Api.Services.Employes;
 
-public class EmployeeService(ApiContext apiContext)
+public class EmployeeService(ApiContext apiContext) : IEmployeeService
 {
-    /// <summary>
-    /// Retrieves all employees with their dependents.
-    /// </summary>
+    /// <inheritdoc />
     public async Task<List<GetEmployeeDto>> GetAllEmployeesAsync(CancellationToken cancellationToken)
     {
         return await apiContext.Employees
@@ -21,6 +19,7 @@ public class EmployeeService(ApiContext apiContext)
             .ToListAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<GetEmployeeDto?> GetEmployeeAsync(int employeeId, CancellationToken cancellationToken)
     {
         return await apiContext.Employees
