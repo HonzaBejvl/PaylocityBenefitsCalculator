@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using System;
+using Api.Model.Models;
 
 namespace Api.Dtos.Dependent;
 

@@ -1,6 +1,12 @@
-﻿using Api.Dtos.Dependent;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
+using Api.Model.Models;
 using Api.Models;
+using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,11 +16,21 @@ namespace Api.Controllers;
 [Route("api/v1/[controller]")]
 public class EmployeesController : ControllerBase
 {
+    private readonly EmployeeService _employeeService;
+
+    public EmployeesController(EmployeeService employeeService)
+    {
+        _employeeService = employeeService;
+    }
+
     [SwaggerOperation(Summary = "Get employee by id")]
     [HttpGet("{id}")]
-    public async Task<ActionResult<ApiResponse<GetEmployeeDto>>> Get(int id)
+    public async Task<ActionResult<ApiResponse<GetEmployeeDto>>> Get(int id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var employee = await _employeeService.GetEmployeeAsync(id, cancellationToken);
+        return employee is null
+            ? NotFound(new ApiResponse<GetEmployeeDto> { Message = "Employee not found" })
+            : new ApiResponse<GetEmployeeDto> { Data = employee, Success = true };
     }
 
     [SwaggerOperation(Summary = "Get all employees")]
