@@ -25,6 +25,8 @@ public class EmployeesController : ControllerBase
     }
 
     [SwaggerOperation(Summary = "Get employee by id")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<GetEmployeeDto>))]
+    [ProducesResponseType(404, Type = typeof(ApiResponse<GetEmployeeDto>))]
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetEmployeeDto>>> Get(int id, CancellationToken cancellationToken)
     {
@@ -35,14 +37,18 @@ public class EmployeesController : ControllerBase
     }
 
     [SwaggerOperation(Summary = "Get all employees")]
-    [HttpGet]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<List<GetEmployeeDto>>))]
+    [HttpGet("")]
     public async Task<ActionResult<ApiResponse<List<GetEmployeeDto>>>> GetAll(CancellationToken cancellationToken)
     {
         var employees = await _employeeService.GetAllEmployeesAsync(cancellationToken);
         return Ok(new ApiResponse<List<GetEmployeeDto>> { Data = employees, Success = true });
     }
     
-    [SwaggerOperation(Summary = "Get employee by id")]
+    [SwaggerOperation(Summary = "Get employee's paycheck by id")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<GetPaycheckDto>))]
+    [ProducesResponseType(404, Type = typeof(ApiResponse<GetPaycheckDto>))]
+    [ProducesResponseType(400)]
     [HttpGet("{id}/paycheck")]
     public async Task<ActionResult<ApiResponse<GetPaycheckDto>>> GetPaycheck(int id, CancellationToken cancellationToken)
     {

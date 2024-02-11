@@ -22,6 +22,8 @@ public class DependentsController : ControllerBase
     }
 
     [SwaggerOperation(Summary = "Get dependent by id")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<GetDependentDto>))]
+    [ProducesResponseType(404, Type = typeof(ApiResponse<GetDependentDto>))]
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetDependentDto>>> Get(int id, CancellationToken cancellationToken)
     {
@@ -32,7 +34,9 @@ public class DependentsController : ControllerBase
     }
 
     [SwaggerOperation(Summary = "Get all dependents")]
-    [HttpGet("")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<List<GetDependentDto>>))]
+    [ProducesResponseType(404, Type = typeof(ApiResponse<List<GetDependentDto>>))]
+    [HttpGet]
     public async Task<ActionResult<ApiResponse<List<GetDependentDto>>>> GetAll(CancellationToken cancellationToken)
     {
         var dependents = await _dependentService.GetAllDependentAsync(cancellationToken);
