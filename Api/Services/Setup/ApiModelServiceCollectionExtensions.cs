@@ -1,5 +1,6 @@
 using Api.Services.Dependents;
 using Api.Services.Employes;
+using Api.Services.Paychecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +12,19 @@ public static class ApiServicesServiceCollectionExtensions
     {
         services.AddTransient<IDependentService, DependentService>();
         services.AddTransient<IEmployeeService, EmployeeService>();
+
+        services.AddTransient<IPaycheckCalculationService, PaycheckCalculationService>();
+        services.AddPaycheckRules();
         
         return services;
     }
+    
+    private static IServiceCollection AddPaycheckRules(this IServiceCollection services)
+    {
+        services.AddTransient<IPaycheckCalculationRule, BaseBenefitsCostRule>();
+        services.AddTransient<IPaycheckCalculationRule, DependentCostRule>();
+        services.AddTransient<IPaycheckCalculationRule, HighEarnerRule>();
+        services.AddTransient<IPaycheckCalculationRule, OlderDependentAdditionalCostRule>();
+        return services;
+    } 
 }

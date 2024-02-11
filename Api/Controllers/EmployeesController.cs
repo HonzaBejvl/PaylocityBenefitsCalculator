@@ -2,9 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Api.Dtos.Employee;
+using Api.Dtos.Paycheck;
 using Api.Models;
-using Api.Services;
 using Api.Services.Employes;
+using Api.Services.Paychecks;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -15,10 +16,12 @@ namespace Api.Controllers;
 public class EmployeesController : ControllerBase
 {
     private readonly IEmployeeService _employeeService;
+    private readonly IPaycheckCalculationService _paycheckCalculationService;
 
-    public EmployeesController(IEmployeeService employeeService)
+    public EmployeesController(IEmployeeService employeeService, IPaycheckCalculationService paycheckCalculationService)
     {
         _employeeService = employeeService;
+        _paycheckCalculationService = paycheckCalculationService;
     }
 
     [SwaggerOperation(Summary = "Get employee by id")]
@@ -37,5 +40,19 @@ public class EmployeesController : ControllerBase
     {
         var employees = await _employeeService.GetAllEmployeesAsync(cancellationToken);
         return Ok(new ApiResponse<List<GetEmployeeDto>> { Data = employees, Success = true });
+    }
+    
+    [SwaggerOperation(Summary = "Get employee by id")]
+    [HttpGet("{id}/paycheck")]
+    public async Task<ActionResult<ApiResponse<GetPaycheckDto>>> GetPaycheck(int id, CancellationToken cancellationToken)
+    {
+        var employee = await _employeeService.GetEmployeeAsync(id, cancellationToken);
+        if(employee is null)
+        {
+            return NotFound(new ApiResponse<GetPaycheckDto> { Message = "Employee not found" });
+        }
+        
+        var paycheck = _paycheckCalculationService.CalculatePaycheck(employee);
+        return Ok(new ApiResponse<GetPaycheckDto> { Data = paycheck, Success = true });
     }
 }

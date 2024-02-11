@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace ApiTests;
+namespace ApiTests.IntegrationTests;
 
 public class IntegrationTest : IDisposable
 {

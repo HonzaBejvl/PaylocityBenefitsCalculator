@@ -5,7 +5,7 @@ using Api.Models;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace ApiTests;
+namespace ApiTests.IntegrationTests;
 
 internal static class ShouldExtensions
 {
